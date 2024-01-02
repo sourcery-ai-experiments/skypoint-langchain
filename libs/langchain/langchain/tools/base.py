@@ -3,6 +3,7 @@ from langchain_core.tools import (
     SchemaAnnotationError,
     StructuredTool,
     Tool,
+    StateTool,
     ToolException,
     create_schema_from_function,
     tool,
@@ -14,6 +15,7 @@ __all__ = [
     "ToolException",
     "BaseTool",
     "Tool",
+    "StateTool",
     "StructuredTool",
     "tool",
 ]
