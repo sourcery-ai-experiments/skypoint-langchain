@@ -6,18 +6,17 @@ import re
 from typing import Any, Dict, List, Optional
 
 import requests
+from langchain.base_language import BaseLanguageModel
 from langchain.callbacks.manager import (
     AsyncCallbackManagerForToolRun,
     CallbackManagerForToolRun,
 )
-from langchain.base_language import BaseLanguageModel
 from langchain.chains.llm import LLMChain
-
 from langchain.prompts import PromptTemplate
 from langchain.sql_database import SQLDatabase
-from langchain_core.tools import StateTool
 from langchain.tools.spark_unitycatalog.prompt import SQL_QUERY_VALIDATOR
-from pydantic import BaseModel, Extra, Field
+from langchain_core.pydantic_v1 import BaseModel, Extra, Field
+from langchain_core.tools import StateTool
 from requests.adapters import HTTPAdapter
 from sqlalchemy.exc import ProgrammingError
 from urllib3.util.retry import Retry
@@ -245,7 +244,7 @@ class SqlQueryValidatorTool(StateTool):
 
     Example Input: "Select * from table1"
     """
-    llm : BaseLanguageModel = Field(exclude=True)
+    llm: BaseLanguageModel = Field(exclude=True)
 
     class Config(StateTool.Config):
         """Configuration for this pydantic object."""
@@ -265,7 +264,7 @@ class SqlQueryValidatorTool(StateTool):
         """Get the schema for tables in a comma-separated list."""
         if hasattr(self, "state"):
             return self._validate_sql_query(query)
-            
+
         else:
             return "This tool is not meant to be run directly. Start with a ListUnityCatalogTablesTool"
 
@@ -303,7 +302,7 @@ class SqlQueryValidatorTool(StateTool):
         return sql_db_schema_value
 
     def _validate_sql_query(self, query):
-        
+
         db_schema = self._parse_db_schema()
 
         if len(db_schema) == 0:
@@ -357,6 +356,7 @@ class QueryUCSQLDataBaseTool(StateTool):
             return self.db.run_no_throw(executable_query)
         else:
             return "This tool is not meant to be run directly. Start with a ListUnityCatalogTablesTool"
+
     async def _arun(
         self,
         query: str,
