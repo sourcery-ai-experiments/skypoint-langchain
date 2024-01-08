@@ -40,6 +40,7 @@ from langchain.agents.agent import (
     BaseMultiActionAgent,
     BaseSingleActionAgent,
     LLMSingleActionAgent,
+    StateAgentExecutor,
 )
 from langchain.agents.agent_iterator import AgentExecutorIterator
 from langchain.agents.agent_toolkits import (
@@ -115,6 +116,7 @@ __all__ = [
     "ReActChain",
     "ReActTextWorldAgent",
     "SelfAskWithSearchChain",
+    "StateAgentExecutor",
     "StructuredChatAgent",
     "Tool",
     "ZeroShotAgent",

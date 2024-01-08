@@ -18,7 +18,7 @@ tool for the job.
 """
 from typing import Any
 
-from langchain_core.tools import BaseTool, StructuredTool, Tool, tool
+from langchain_core.tools import BaseTool, StructuredTool, Tool, tool,StateTool
 
 # Used for internal purposes
 _DEPRECATED_TOOLS = {"PythonAstREPLTool", "PythonREPLTool"}
@@ -545,6 +545,16 @@ def _import_requests_tool_RequestsPutTool() -> Any:
 
     return RequestsPutTool
 
+def _import_retriever_qatool() -> Any:
+    from langchain.tools.retriever.tool import RetrievalQA
+
+    return RetrievalQA
+
+
+def _import_retriever_with_sources_qatool() -> Any:
+    from langchain.tools.retriever.tool import RetrieverQAWithSourcesTool
+
+    return RetrieverQAWithSourcesTool
 
 def _import_steam_webapi_tool() -> Any:
     from langchain.tools.steam.tool import SteamWebAPIQueryRun
@@ -664,6 +674,29 @@ def _import_sql_database_tool_QuerySQLDataBaseTool() -> Any:
     from langchain.tools.sql_database.tool import QuerySQLDataBaseTool
 
     return QuerySQLDataBaseTool
+
+def _import_spark_unitycatalog_tool_InfoUnityCatalogTool() -> Any:
+    from langchain.tools.spark_unitycatalog.tool import InfoUnityCatalogTool
+
+    return InfoUnityCatalogTool
+
+
+def _import_spark_unitycatalog_tool_ListUnityCatalogTablesTool() -> Any:
+    from langchain.tools.spark_unitycatalog.tool import ListUnityCatalogTablesTool
+
+    return ListUnityCatalogTablesTool
+
+
+def _import_spark_unitycatalog_tool_QueryUCSQLDataBaseTool() -> Any:
+    from langchain.tools.spark_unitycatalog.tool import QueryUCSQLDataBaseTool
+
+    return QueryUCSQLDataBaseTool
+
+
+def _import_spark_unitycatalog_tool_SqlQueryValidatorTool() -> Any:
+    from langchain.tools.spark_unitycatalog.tool import SqlQueryValidatorTool
+
+    return SqlQueryValidatorTool
 
 
 def _import_stackexchange_tool() -> Any:
@@ -909,6 +942,10 @@ def __getattr__(name: str) -> Any:
         return _import_requests_tool_RequestsPostTool()
     elif name == "RequestsPutTool":
         return _import_requests_tool_RequestsPutTool()
+    elif name == "RetrievalQA":
+        return _import_retriever_qatool()
+    elif name == "RetrieverQAWithSourcesTool":
+        return _import_retriever_with_sources_qatool()
     elif name == "SteamWebAPIQueryRun":
         return _import_steam_webapi_tool()
     elif name == "SceneXplainTool":
@@ -949,6 +986,14 @@ def __getattr__(name: str) -> Any:
         return _import_sql_database_tool_QuerySQLCheckerTool()
     elif name == "QuerySQLDataBaseTool":
         return _import_sql_database_tool_QuerySQLDataBaseTool()
+    elif name == "InfoUnityCatalogTablesTool":
+        return _import_spark_unitycatalog_tool_InfoUnityCatalogTool()
+    elif name == "ListUnityCatalogTablesTool":
+        return _import_spark_unitycatalog_tool_ListUnityCatalogTablesTool()
+    elif name == "QueryUCSQLDataBaseTool":
+        return _import_spark_unitycatalog_tool_QueryUCSQLDataBaseTool()
+    elif name == "SqlQueryValidatorTool":
+        return _import_spark_unitycatalog_tool_SqlQueryValidatorTool()
     elif name == "StackExchangeTool":
         return _import_stackexchange_tool()
     elif name == "SteamshipImageGenerationTool":
@@ -1038,6 +1083,7 @@ __all__ = [
     "InfoPowerBITool",
     "InfoSQLDatabaseTool",
     "InfoSparkSQLTool",
+    "InfoUnityCatalogTablesTool",
     "JiraAction",
     "JsonGetValueTool",
     "JsonListKeysTool",
@@ -1045,6 +1091,7 @@ __all__ = [
     "ListPowerBITool",
     "ListSQLDatabaseTool",
     "ListSparkSQLTool",
+    "ListUnityCatalogTablesTool",
     "MerriamWebsterQueryRun",
     "MetaphorSearchResults",
     "MoveFileTool",
@@ -1065,12 +1112,15 @@ __all__ = [
     "QuerySQLCheckerTool",
     "QuerySQLDataBaseTool",
     "QuerySparkSQLTool",
+    "QueryUCSQLDataBaseTool",
     "ReadFileTool",
     "RequestsDeleteTool",
     "RequestsGetTool",
     "RequestsPatchTool",
     "RequestsPostTool",
     "RequestsPutTool",
+    "RetrievalQA",
+    "RetrieverQAWithSourcesTool",
     "SteamWebAPIQueryRun",
     "SceneXplainTool",
     "SearxSearchResults",
@@ -1081,10 +1131,12 @@ __all__ = [
     "SlackScheduleMessage",
     "SlackSendMessage",
     "SleepTool",
+    "SqlQueryValidatorTool",
     "StdInInquireTool",
     "StackExchangeTool",
     "SteamshipImageGenerationTool",
     "StructuredTool",
+    "StateTool",
     "Tool",
     "VectorStoreQATool",
     "VectorStoreQAWithSourcesTool",
