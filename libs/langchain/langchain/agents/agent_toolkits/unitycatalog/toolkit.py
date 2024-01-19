@@ -3,7 +3,7 @@ from typing import List
 
 from langchain.agents.agent_toolkits.base import BaseToolkit
 from langchain.base_language import BaseLanguageModel
-from langchain.sql_database import SQLDatabase
+from langchain_core.utils.uc_jdbc_database import UCJDBCDatabase
 from langchain.tools import BaseTool
 from langchain.tools.spark_unitycatalog.tool import (
     InfoUnityCatalogTool,
@@ -18,7 +18,7 @@ from langchain_core.pydantic_v1 import Field
 class UCSQLDatabaseToolkit(BaseToolkit):
     """Toolkit for interacting with SQL databases."""
 
-    db: SQLDatabase = Field(exclude=True)
+    db: UCJDBCDatabase = Field(exclude=True)
     llm: BaseLanguageModel = Field(exclude=True)
     db_token: str
     db_host: str

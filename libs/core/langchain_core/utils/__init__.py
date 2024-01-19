@@ -24,6 +24,7 @@ from langchain_core.utils.utils import (
     raise_for_status_with_text,
     xor_args,
 )
+from langchain_core.utils.uc_jdbc_database import UCJDBCDatabase
 
 __all__ = [
     "StrictFormatter",
@@ -46,4 +47,5 @@ __all__ = [
     "stringify_dict",
     "comma_list",
     "stringify_value",
+    "UCJDBCDatabase"
 ]
