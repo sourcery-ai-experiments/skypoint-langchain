@@ -13,18 +13,19 @@ from langchain.callbacks.manager import (
 )
 from langchain.chains.llm import LLMChain
 from langchain.prompts import PromptTemplate
-from langchain.tools.spark_unitycatalog.prompt import SQL_QUERY_VALIDATOR, QUERY_CHECKER
-from langchain_core.pydantic_v1 import BaseModel, Extra, Field,root_validator
+from langchain.sql_database import SQLDatabase
+from langchain.tools.spark_unitycatalog.prompt import SQL_QUERY_VALIDATOR
+from langchain_core.pydantic_v1 import BaseModel, Extra, Field
 from langchain_core.tools import StateTool
 from requests.adapters import HTTPAdapter
 from sqlalchemy.exc import ProgrammingError
 from urllib3.util.retry import Retry
-from langchain_core.utils.uc_jdbc_database import UCJDBCDatabase
+
 
 class BaseSQLDatabaseTool(BaseModel):
     """Base tool for interacting with a SQL database."""
 
-    db: UCJDBCDatabase
+    db: SQLDatabase = Field(exclude=True)
 
     # Override BaseTool.Config to appease mypy
     # See https://github.com/pydantic/pydantic/issues/4173
@@ -45,7 +46,7 @@ class InfoUnityCatalogTool(StateTool):
         extra = Extra.allow
 
     """Tool for getting metadata about a SQL database."""
-    db : UCJDBCDatabase = None
+    db: SQLDatabase = Field(exclude=True)
     name = "sql_db_schema"
     description = """
     Input to this tool is a comma-separated list of tables, output is the schema , comments of columns, and sample rows for those tables.    
@@ -156,11 +157,11 @@ class InfoUnityCatalogTool(StateTool):
         )
 
         try:
-            
-            sample_rows_result = [x._asdict() for x in self.db.execute(executable_query)]
-            sample_rows = list(
-                map(lambda ls: [str(i)[:100] for i in ls], sample_rows_result)
-            )
+            with self.db._engine.connect() as connection:
+                sample_rows_result = connection.execute(command)
+                sample_rows = list(
+                    map(lambda ls: [str(i)[:100] for i in ls], sample_rows_result)
+                )
             sample_rows_str = "\n".join(["\t".join(row) for row in sample_rows])
 
         except ProgrammingError:
@@ -177,7 +178,7 @@ class ListUnityCatalogTablesTool(StateTool):
         extra = Extra.allow
 
     """Tool for getting tables names."""
-    db: UCJDBCDatabase= None
+    db: SQLDatabase = Field(exclude=True)
     name = "sql_db_list_tables"
     description = """Input is an empty string, output is a comma separated list tables in the database and their description in brackets."""
     db_token: str
@@ -327,7 +328,7 @@ class QueryUCSQLDataBaseTool(StateTool):
         arbitrary_types_allowed = True
         extra = Extra.allow
 
-    db: UCJDBCDatabase = None
+    db: SQLDatabase = Field(exclude=True)
     name: str = "sql_db_query"
     description: str = """
     Input to this tool is a detailed and correct SQL query, output is a result from the database.
@@ -352,13 +353,13 @@ class QueryUCSQLDataBaseTool(StateTool):
             else:
                 executable_query = query.strip()
             executable_query = executable_query.strip('"')
-            return [x._asdict() for x in self.db.execute(executable_query)]
+            return self.db.run_no_throw(executable_query)
         else:
             return "This tool is not meant to be run directly. Start with a ListUnityCatalogTablesTool"
 
     async def _arun(
         self,
-        table_name: str,
+        query: str,
         run_manager: Optional[AsyncCallbackManagerForToolRun] = None,
     ) -> str:
         raise NotImplementedError("SQLQueryTool does not support async")
