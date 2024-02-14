@@ -698,11 +698,6 @@ def _import_spark_unitycatalog_tool_SqlQueryValidatorTool() -> Any:
 
     return SqlQueryValidatorTool
 
-def _import_spark_unitycatalog_tool_QueryUCSQLCheckerTool() -> Any:
-    from langchain.tools.spark_unitycatalog.tool import QueryUCSQLCheckerTool
-
-    return QueryUCSQLCheckerTool
-
 
 def _import_stackexchange_tool() -> Any:
     from langchain.tools.stackexchange.tool import StackExchangeTool
@@ -1116,7 +1111,6 @@ __all__ = [
     "QueryPowerBITool",
     "QuerySQLCheckerTool",
     "QuerySQLDataBaseTool",
-    "QueryUCSQLCheckerTool",
     "QuerySparkSQLTool",
     "QueryUCSQLDataBaseTool",
     "ReadFileTool",
