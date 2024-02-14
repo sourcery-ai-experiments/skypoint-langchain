@@ -24,7 +24,6 @@ EXPECTED_ALL = [
     "OutlineRetriever",
     "PineconeHybridSearchRetriever",
     "PubMedRetriever",
-    "QdrantSparseVectorRetriever",
     "RemoteLangChainRetriever",
     "SVMRetriever",
     "TavilySearchAPIRetriever",

@@ -118,6 +118,7 @@ __all__ = [
     "SelfAskWithSearchChain",
     "StateAgentExecutor",
     "StructuredChatAgent",
+    "StateAgentExecutor",
     "Tool",
     "ZeroShotAgent",
     "create_json_agent",

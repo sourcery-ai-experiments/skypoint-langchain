@@ -8,8 +8,6 @@ from langchain_community.tools.slack.base import SlackBaseTool
 
 
 class SlackGetChannel(SlackBaseTool):
-    """Tool that gets Slack channel information."""
-
     name: str = "get_channelid_name_dict"
     description: str = "Use this tool to get channelid-name dict."
 

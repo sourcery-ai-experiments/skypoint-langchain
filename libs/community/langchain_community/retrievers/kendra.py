@@ -379,9 +379,7 @@ class AmazonKendraRetriever(BaseRetriever):
     def _kendra_query(self, query: str) -> Sequence[ResultItem]:
         kendra_kwargs = {
             "IndexId": self.index_id,
-            # truncate the query to ensure that
-            # there is no validation exception from Kendra.
-            "QueryText": query.strip()[0:999],
+            "QueryText": query.strip(),
             "PageSize": self.top_k,
         }
         if self.attribute_filter is not None:

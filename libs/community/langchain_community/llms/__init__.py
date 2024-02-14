@@ -52,12 +52,6 @@ def _import_anyscale() -> Any:
     return Anyscale
 
 
-def _import_aphrodite() -> Any:
-    from langchain_community.llms.aphrodite import Aphrodite
-
-    return Aphrodite
-
-
 def _import_arcee() -> Any:
     from langchain_community.llms.arcee import Arcee
 
@@ -553,8 +547,6 @@ def __getattr__(name: str) -> Any:
         return _import_anthropic()
     elif name == "Anyscale":
         return _import_anyscale()
-    elif name == "Aphrodite":
-        return _import_aphrodite()
     elif name == "Arcee":
         return _import_arcee()
     elif name == "Aviary":
@@ -727,7 +719,6 @@ __all__ = [
     "AmazonAPIGateway",
     "Anthropic",
     "Anyscale",
-    "Aphrodite",
     "Arcee",
     "Aviary",
     "AzureMLOnlineEndpoint",

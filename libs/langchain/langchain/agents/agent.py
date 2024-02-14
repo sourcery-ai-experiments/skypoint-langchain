@@ -1471,6 +1471,7 @@ class AgentExecutor(Chain):
         )
         async for step in iterator:
             yield step
+
 class StateAgentExecutor(AgentExecutor):
     """Agent that is using tools."""
 

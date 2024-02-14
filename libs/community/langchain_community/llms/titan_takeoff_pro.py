@@ -10,8 +10,6 @@ from langchain_community.llms.utils import enforce_stop_tokens
 
 
 class TitanTakeoffPro(LLM):
-    """Titan Takeoff Pro is a language model that can be used to generate text."""
-
     base_url: Optional[str] = "http://localhost:3000"
     """Specifies the baseURL to use for the Titan Takeoff Pro API.
     Default = http://localhost:3000.

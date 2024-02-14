@@ -8,8 +8,6 @@ IMAGE_AND_VIDEO_LIBRARY_URL = "https://images-api.nasa.gov"
 
 
 class NasaAPIWrapper(BaseModel):
-    """Wrapper for NASA API."""
-
     def get_media(self, query: str) -> str:
         params = json.loads(query)
         if params.get("q"):

@@ -13,8 +13,6 @@ from langchain_community.document_loaders.unstructured import UnstructuredBaseLo
 
 
 class LakeFSClient:
-    """Client for lakeFS."""
-
     def __init__(
         self,
         lakefs_access_key: str,
@@ -128,8 +126,6 @@ class LakeFSLoader(BaseLoader):
 
 
 class UnstructuredLakeFSLoader(UnstructuredBaseLoader):
-    """Load from `lakeFS` as unstructured data."""
-
     def __init__(
         self,
         url: str,
@@ -139,7 +135,7 @@ class UnstructuredLakeFSLoader(UnstructuredBaseLoader):
         presign: bool = True,
         **unstructured_kwargs: Any,
     ):
-        """Initialize UnstructuredLakeFSLoader.
+        """
 
         Args:
 

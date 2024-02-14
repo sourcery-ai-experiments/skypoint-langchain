@@ -57,8 +57,6 @@ def _get_verbosity() -> bool:
 
 
 def generate_from_stream(stream: Iterator[ChatGenerationChunk]) -> ChatResult:
-    """Generate from a stream."""
-
     generation: Optional[ChatGenerationChunk] = None
     for chunk in stream:
         if generation is None:
@@ -79,8 +77,6 @@ def generate_from_stream(stream: Iterator[ChatGenerationChunk]) -> ChatResult:
 async def agenerate_from_stream(
     stream: AsyncIterator[ChatGenerationChunk],
 ) -> ChatResult:
-    """Async generate from a stream."""
-
     generation: Optional[ChatGenerationChunk] = None
     async for chunk in stream:
         if generation is None:

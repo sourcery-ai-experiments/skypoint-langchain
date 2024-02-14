@@ -64,7 +64,7 @@ class IndexParams:
 
 
 class TencentVectorDB(VectorStore):
-    """Tencent VectorDB as a vector store.
+    """Initialize wrapper around the tencent vector database.
 
     In order to use this you need to have a database instance.
     See the following documentation for details:

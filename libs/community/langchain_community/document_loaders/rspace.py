@@ -9,9 +9,11 @@ from langchain_community.document_loaders.base import BaseLoader
 
 
 class RSpaceLoader(BaseLoader):
-    """Load content from RSpace notebooks, folders, documents or PDF Gallery files.
+    """
+    Loads  content from RSpace notebooks, folders, documents or PDF Gallery files into
+    Langchain documents.
 
-    Map RSpace document <-> Langchain Document in 1-1. PDFs are imported using PyPDF.
+    Maps  RSpace document <-> Langchain Document in 1-1. PDFs are imported using PyPDF.
 
     Requirements are rspace_client (`pip install rspace_client`) and PyPDF if importing
      PDF docs (`pip install pypdf`).
@@ -43,7 +45,7 @@ class RSpaceLoader(BaseLoader):
 
     @classmethod
     def validate_environment(cls, values: Dict) -> Dict:
-        """Validate that API key and URL exist in environment."""
+        """Validate that API key and URL exists in environment."""
         values["api_key"] = get_from_dict_or_env(values, "api_key", "RSPACE_API_KEY")
         values["url"] = get_from_dict_or_env(values, "url", "RSPACE_URL")
         if "global_id" not in values or values["global_id"] is None:

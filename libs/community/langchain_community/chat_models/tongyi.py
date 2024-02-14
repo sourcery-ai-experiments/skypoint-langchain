@@ -53,8 +53,6 @@ logger = logging.getLogger(__name__)
 
 
 def convert_dict_to_message(_dict: Mapping[str, Any]) -> BaseMessage:
-    """Convert a dict to a message."""
-
     role = _dict["role"]
     if role == "user":
         return HumanMessage(content=_dict["content"])
@@ -74,8 +72,6 @@ def convert_dict_to_message(_dict: Mapping[str, Any]) -> BaseMessage:
 
 
 def convert_message_to_dict(message: BaseMessage) -> dict:
-    """Convert a message to a dict."""
-
     message_dict: Dict[str, Any]
     if isinstance(message, ChatMessage):
         message_dict = {"role": message.role, "content": message.content}

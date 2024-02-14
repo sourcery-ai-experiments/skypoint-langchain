@@ -118,7 +118,6 @@ class ArxivAPIWrapper(BaseModel):
             Document(
                 page_content=result.summary,
                 metadata={
-                    "Entry ID": result.entry_id,
                     "Published": result.updated.date(),
                     "Title": result.title,
                     "Authors": ", ".join(a.name for a in result.authors),

@@ -17,7 +17,7 @@ logger = logging.getLogger(__name__)
 
 
 class Together(LLM):
-    """LLM models from `Together`.
+    """Wrapper around Together AI models.
 
     To use, you'll need an API key which you can find here:
     https://api.together.xyz/settings/api-keys. This can be passed in as init param
