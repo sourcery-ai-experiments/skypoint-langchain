@@ -121,23 +121,19 @@ class BaseQAWithSourcesChain(Chain, ABC):
 
     def _split_sources(self, raw_answer: str) -> Tuple[str, str]:
         """Split sources from answer."""
-        try:
-            if re.search(r"SOURCES?:", raw_answer, re.IGNORECASE):
+        if re.search(r"SOURCES?:", raw_answer, re.IGNORECASE):
+            try:
                 answer, raw_sources = re.split(
-                        r"SOURCES?:|QUESTION:\s", raw_answer, flags=re.IGNORECASE
-                    )[:2]
+                    r"SOURCES?:|QUESTION:\s", raw_answer, flags=re.IGNORECASE
+                )[:2]
                 sources = re.split(r"\n", raw_sources)[0].strip()
                 if sources == "":
                     regex = r"- \s*(.+\.pdf)"
                     sources_list = re.findall(regex, raw_sources)
                     sources = ', '.join(sources_list)
-            else:
-                answer = raw_answer
+            except Exception as e:
+                print(f"An Exception has occured for answer : {raw_answer}",e)
                 sources = ""
-        except Exception as e:
-            print(f"An error occurred: {e}")
-            answer = raw_answer
-            sources = ""
         return answer, sources
 
     @abstractmethod
