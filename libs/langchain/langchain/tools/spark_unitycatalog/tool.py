@@ -11,12 +11,12 @@ from langchain.callbacks.manager import (
     AsyncCallbackManagerForToolRun,
     CallbackManagerForToolRun,
 )
-from langchain.chains import LLMChain
+from langchain.chains.llm import LLMChain
 from langchain.prompts import PromptTemplate
 from langchain.sql_database import SQLDatabase
-from langchain.tools.base import StateTool
 from langchain.tools.spark_unitycatalog.prompt import SQL_QUERY_VALIDATOR
 from langchain_core.pydantic_v1 import BaseModel, Extra, Field
+from langchain_core.tools import StateTool
 from requests.adapters import HTTPAdapter
 from sqlalchemy.exc import ProgrammingError
 from urllib3.util.retry import Retry
@@ -262,7 +262,11 @@ class SqlQueryValidatorTool(StateTool):
         run_manager: Optional[CallbackManagerForToolRun] = None,
     ) -> str:
         """Get the schema for tables in a comma-separated list."""
-        return self._validate_sql_query(query)
+        if hasattr(self, "state"):
+            return self._validate_sql_query(query)
+
+        else:
+            return "This tool is not meant to be run directly. Start with a ListUnityCatalogTablesTool"
 
     async def _arun(
         self,
@@ -273,7 +277,6 @@ class SqlQueryValidatorTool(StateTool):
 
     def _parse_db_schema(self):
         sql_db_schema_value = {}
-
         for value in self.state:
             for key, input_string in value.items():
                 if "sql_db_schema" in key:
@@ -343,13 +346,16 @@ class QueryUCSQLDataBaseTool(StateTool):
         run_manager: Optional[CallbackManagerForToolRun] = None,
     ) -> str:
         """Execute the query, return the results or an error message."""
-        extracted_sql_query = self._extract_sql_query()
-        if extracted_sql_query:
-            executable_query = extracted_sql_query.strip()
+        if hasattr(self, "state"):
+            extracted_sql_query = self._extract_sql_query()
+            if extracted_sql_query:
+                executable_query = extracted_sql_query.strip()
+            else:
+                executable_query = query.strip()
+            executable_query = executable_query.strip('"')
+            return self.db.run_no_throw(executable_query)
         else:
-            executable_query = query.strip()
-        executable_query = executable_query.strip('"')
-        return self.db.run_no_throw(executable_query)
+            return "This tool is not meant to be run directly. Start with a ListUnityCatalogTablesTool"
 
     async def _arun(
         self,

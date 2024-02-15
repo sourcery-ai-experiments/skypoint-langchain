@@ -116,6 +116,7 @@ __all__ = [
     "ReActChain",
     "ReActTextWorldAgent",
     "SelfAskWithSearchChain",
+    "StateAgentExecutor",
     "StructuredChatAgent",
     "StateAgentExecutor",
     "Tool",

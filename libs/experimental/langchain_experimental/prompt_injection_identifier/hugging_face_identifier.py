@@ -14,7 +14,11 @@ def _model_default_factory(
     model_name: str = "deepset/deberta-v3-base-injection"
 ) -> Pipeline:
     try:
-        from transformers import pipeline
+        from transformers import (
+            AutoModelForSequenceClassification,
+            AutoTokenizer,
+            pipeline,
+        )
     except ImportError as e:
         raise ImportError(
             "Cannot import transformers, please install with "
@@ -48,8 +52,13 @@ class HuggingFaceInjectionIdentifier(BaseTool):
 
     def _run(self, query: str) -> str:
         """Use the tool."""
-        result = self.model(query)
-        result = sorted(result, key=lambda x: x["score"], reverse=True)
-        if result[0]["label"] == "INJECTION":
-            raise ValueError("Prompt injection attack detected")
+        result = self.model(query)  # type: ignore
+        score = (
+            result[0]["score"]
+            if result[0]["label"] == self.injection_label
+            else 1 - result[0]["score"]
+        )
+        if score > self.threshold:
+            raise PromptInjectionException("Prompt injection attack detected", score)
+
         return query
