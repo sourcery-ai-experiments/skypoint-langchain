@@ -10,6 +10,7 @@ from langchain.tools.spark_unitycatalog.tool import (
     ListUnityCatalogTablesTool,
     QueryUCSQLDataBaseTool,
     SqlQueryValidatorTool,
+    SqlQueryCreatorTool,    
 )
 from langchain.tools.sql_database.tool import QuerySQLCheckerTool
 from langchain_core.pydantic_v1 import Field
@@ -26,6 +27,7 @@ class UCSQLDatabaseToolkit(BaseToolkit):
     db_schema: str
     db_warehouse_id: str
     allow_extra_fields = True
+    sqlcreatorllm : BaseLanguageModel = Field(exclude=True)
 
     @property
     def dialect(self) -> str:
@@ -76,4 +78,12 @@ class UCSQLDatabaseToolkit(BaseToolkit):
             ),
             QuerySQLCheckerTool(db=self.db, llm=self.llm),
             SqlQueryValidatorTool(llm=self.llm),
+            SqlQueryCreatorTool(
+                sqlcreatorllm=self.sqlcreatorllm , 
+                db=self.db,
+                db_token=self.db_token,
+                db_host=self.db_host,
+                db_catalog=self.db_catalog,
+                db_schema=self.db_schema,
+                db_warehouse_id=self.db_warehouse_id )
         ]
