@@ -4,6 +4,7 @@ import json
 import os
 import re
 from typing import Any, Dict, List, Optional
+import logging
 
 import requests
 from langchain.base_language import BaseLanguageModel
@@ -314,9 +315,7 @@ class SqlQueryValidatorTool(StateTool):
         )
         chain = LLMChain(llm=self.llm, prompt=prompt_input)
 
-        query_validation = chain.run(({"db_schema": db_schema, "query": query}))
-
-        return query_validation
+        return chain.run(({"db_schema": db_schema, "query": query}))
 
 
 class QueryUCSQLDataBaseTool(StateTool):
@@ -433,14 +432,18 @@ class SqlQueryCreatorTool(StateTool):
 
 
     def _create_sql_query(self,user_input):
-        for value in self.state:
-            for key in value.items():
-                if "sql_db_list_tables" not in key:
-                    table_names=self.get_table_list_from_unitycatalog()
-                    self.state.append({"sql_db_list_tables":table_names})
-                if "sql_db_schema" not in key:
-                    db_schema = self.get_table_details_from_unity_catalog(table_names=table_names)
-                    self.state.append({"sql_db_schema":db_schema})
+        
+        keys = [key for value in self.state for key in value.keys()]
+        
+        if "sql_db_list_tables" not in keys:
+            logging.info('Getting table names')
+            table_names=self.get_table_list_from_unitycatalog()
+            self.state.append({"sql_db_list_tables":table_names})
+            
+        if "sql_db_schema" not in keys:
+            logging.info('Getting table schema')
+            db_schema = self.get_table_details_from_unity_catalog(table_names=table_names)
+            self.state.append({"sql_db_schema":db_schema})
 
 
 
