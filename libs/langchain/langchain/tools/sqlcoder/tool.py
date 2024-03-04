@@ -139,52 +139,50 @@ class SqlQueryCreatorTool(StateTool):
         
         few_shot_examples = self._parse_few_shot_examples()
         db_schema = self._parse_db_schema()
-        #sql_query = self._extract_sql_query()
+        sql_query = self._extract_sql_query()
 
-        #if len(sql_query) == 0:
-        prompt_input = PromptTemplate(
-            input_variables=["db_schema", "user_input", "few_shot_examples"],
-            template=SQL_QUERY_CREATOR,
-        )
-        query_creator_chain = LLMChain(llm=self.sqlcreatorllm, prompt=prompt_input)
+        if sql_query is None:
+            prompt_input = PromptTemplate(
+                input_variables=["db_schema", "user_input", "few_shot_examples"],
+                template=SQL_QUERY_CREATOR,
+            )
+            query_creator_chain = LLMChain(llm=self.sqlcreatorllm, prompt=prompt_input)
 
-        sql_query = query_creator_chain.run(
-                    (
-                        {
-                            "db_schema": db_schema,
-                            "user_input": user_input,
-                            "few_shot_examples": few_shot_examples,
-                        }
+            sql_query = query_creator_chain.run(
+                        (
+                            {
+                                "db_schema": db_schema,
+                                "user_input": user_input,
+                                "few_shot_examples": few_shot_examples,
+                            }
+                        )
                     )
-                )
         
-        # else:
-        #     prompt_input = PromptTemplate(
-        #         input_variables=["db_schema", "user_input", "few_shot_examples","sql_query"],
-        #         template=SQL_QUERY_CREATOR + SQL_QUERY_CREATOR_RETRY,
-        #     )
-        #     query_creator_chain = LLMChain(llm=self.sqlcreatorllm, prompt=prompt_input)
+        else:
+            prompt_input = PromptTemplate(
+                input_variables=["db_schema", "user_input", "few_shot_examples","sql_query"],
+                template=SQL_QUERY_CREATOR + SQL_QUERY_CREATOR_RETRY,
+            )
+            query_creator_chain = LLMChain(llm=self.sqlcreatorllm, prompt=prompt_input)
 
-        #     sql_query = query_creator_chain.run(
-        #                 (
-        #                     {
-        #                         "db_schema": db_schema,
-        #                         "user_input": user_input,
-        #                         "few_shot_examples": few_shot_examples,
-        #                         "sql_query": sql_query
-        #                     }
-        #                 )
-        #             )
-        # if hasattr(self, "state"):
-        #     self.state.append({"sql_db_query_creator": sql_query})
+            sql_query = query_creator_chain.run(
+                        (
+                            {
+                                "db_schema": db_schema,
+                                "user_input": user_input,
+                                "few_shot_examples": few_shot_examples,
+                                "sql_query": sql_query
+                            }
+                        )
+                    )
+        if hasattr(self, "state"):
+            self.state.append({"sql_db_query_creator": sql_query})
+        
         return sql_query
     
-    # def _extract_sql_query(self):
-    #     sql_queries = []
-    #     for value in self.state:
-    #         sql_queries.extend(
-    #             input_string
-    #             for key, input_string in value.items()
-    #             if "sql_db_query_creator" in key
-    #         )
-    #     return sql_queries
+    def _extract_sql_query(self):
+        for value in self.state:
+            for key, input_string in value.items():
+                if "sql_db_query_creator" in key:
+                    return input_string
+        return None
