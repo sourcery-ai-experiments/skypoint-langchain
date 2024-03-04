@@ -773,10 +773,15 @@ def _import_spark_unitycatalog_tool_SqlQueryValidatorTool() -> Any:
 
     return SqlQueryValidatorTool
 
-def _import_spark_unitycatalog_tool_SqlQueryCreatorTool() -> Any:
-    from langchain.tools.spark_unitycatalog.tool import SqlQueryCreatorTool
+def _import_sqlcoder_tool_SqlQueryCreatorTool() -> Any:
+    from langchain.tools.sqlcoder.tool import SqlQueryCreatorTool
 
     return SqlQueryCreatorTool
+
+def _import_sqlcoder_tool_QuerySparkSQLDatabaseTool() -> Any:
+    from langchain.tools.sqlcoder.tool import QuerySparkSQLDataBaseTool
+
+    return QuerySparkSQLDataBaseTool
 
 def _import_stackexchange_tool() -> Any:
     from langchain.tools.stackexchange.tool import StackExchangeTool
@@ -1080,7 +1085,9 @@ def __getattr__(name: str) -> Any:
     elif name == "SqlQueryValidatorTool":
         return _import_spark_unitycatalog_tool_SqlQueryValidatorTool()
     elif name == "SqlQueryCreatorTool":
-        return _import_spark_unitycatalog_tool_SqlQueryCreatorTool()
+        return _import_sqlcoder_tool_SqlQueryCreatorTool()
+    elif name == "QuerySparkSQLDataBaseTool":
+        return _import_sqlcoder_tool_QuerySparkSQLDatabaseTool()
     elif name == "InfoSparkSQLTool":
         return _import_spark_sql_tool_InfoSparkSQLTool()
     elif name == "ListSparkSQLTool":
