@@ -157,7 +157,7 @@ class SqlQueryCreatorTool(StateTool):
                             }
                         )
                     )
-        
+            sql_query = sql_query.replace("```","")
         else:
             prompt_input = PromptTemplate(
                 input_variables=["db_schema", "user_input", "few_shot_examples","sql_query"],
@@ -175,6 +175,7 @@ class SqlQueryCreatorTool(StateTool):
                             }
                         )
                     )
+            sql_query = sql_query.replace("```","")
         if hasattr(self, "state"):
             self.state.append({"sql_db_query_creator": sql_query})
         
