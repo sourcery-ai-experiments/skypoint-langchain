@@ -245,6 +245,7 @@ class SqlQueryValidatorTool(StateTool):
     Example Input: "Select * from table1"
     """
     llm: BaseLanguageModel = Field(exclude=True)
+    SQL_QUERY_VALIDATOR_TEMPLATE : str
 
     class Config(StateTool.Config):
         """Configuration for this pydantic object."""
@@ -310,7 +311,7 @@ class SqlQueryValidatorTool(StateTool):
 
         prompt_input = PromptTemplate(
             input_variables=["db_schema", "query"],
-            template=SQL_QUERY_VALIDATOR,
+            template=self.SQL_QUERY_VALIDATOR_TEMPLATE,
         )
         chain = LLMChain(llm=self.llm, prompt=prompt_input)
 
