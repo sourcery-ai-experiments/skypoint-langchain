@@ -26,7 +26,7 @@ class UCSQLDatabaseToolkit(BaseToolkit):
     db_schema: str
     db_warehouse_id: str
     allow_extra_fields = True
-    sqlcreatorllm : BaseLanguageModel = Field(exclude=True)
+    sql_query_validator_template : str 
 
     @property
     def dialect(self) -> str:
@@ -76,5 +76,5 @@ class UCSQLDatabaseToolkit(BaseToolkit):
                 db_warehouse_id=self.db_warehouse_id,
             ),
             QuerySQLCheckerTool(db=self.db, llm=self.llm),
-            SqlQueryValidatorTool(llm=self.llm),
+            SqlQueryValidatorTool(llm=self.llm, SQL_QUERY_VALIDATOR_TEMPLATE = self.sql_query_validator_template),
         ]
