@@ -1534,6 +1534,8 @@ s
                 self.state.append(
                     {str(intermediate_steps[-1][0]): str(intermediate_steps[-1][1])}
                 )
+            elif self.state is not None and "few_shot_examples" in self.state[0].keys():
+                    pass
             else:
                 self.state = []
 
