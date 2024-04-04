@@ -135,15 +135,22 @@ class SqlQueryCreatorTool(StateTool):
                     db_schema = input_string
         return db_schema
 
+    def _parse_data_model_context(self):
+        data_model_context = ""
+        for value in self.state:
+            for key, input_string in value.items():
+                if "data_model_context" in key:
+                    data_model_context = input_string
+        return data_model_context
     def _create_sql_query(self,user_input):
         
         few_shot_examples = self._parse_few_shot_examples()
         db_schema = self._parse_db_schema()
         sql_query = self._extract_sql_query()
-
+        data_model_context = self._parse_data_model_context()
         if sql_query is None:
             prompt_input = PromptTemplate(
-                input_variables=["db_schema", "user_input", "few_shot_examples"],
+                input_variables=["db_schema", "user_input", "few_shot_examples","data_model_context"],
                 template=SQL_QUERY_CREATOR,
             )
             query_creator_chain = LLMChain(llm=self.sqlcreatorllm, prompt=prompt_input)
@@ -154,14 +161,14 @@ class SqlQueryCreatorTool(StateTool):
                                 "db_schema": db_schema,
                                 "user_input": user_input,
                                 "few_shot_examples": few_shot_examples,
+                                "data_model_context": data_model_context
                             }
                         )
                     )
-            sql_query = sql_query.replace("```","")
         else:
             prompt_input = PromptTemplate(
-                input_variables=["db_schema", "user_input", "few_shot_examples","sql_query"],
-                template=SQL_QUERY_CREATOR + SQL_QUERY_CREATOR_RETRY,
+                input_variables=["db_schema", "user_input", "few_shot_examples","sql_query","data_model_context"],
+                template=SQL_QUERY_CREATOR_RETRY,
             )
             query_creator_chain = LLMChain(llm=self.sqlcreatorllm, prompt=prompt_input)
 
@@ -171,11 +178,13 @@ class SqlQueryCreatorTool(StateTool):
                                 "db_schema": db_schema,
                                 "user_input": user_input,
                                 "few_shot_examples": few_shot_examples,
-                                "sql_query": sql_query
+                                "sql_query": sql_query,
+                                "data_model_context": data_model_context
+                                
                             }
                         )
                     )
-            sql_query = sql_query.replace("```","")
+        sql_query = sql_query.replace("```","")
         if hasattr(self, "state"):
             self.state.append({"sql_db_query_creator": sql_query})
         
@@ -184,6 +193,6 @@ class SqlQueryCreatorTool(StateTool):
     def _extract_sql_query(self):
         for value in self.state:
             for key, input_string in value.items():
-                if "sql_db_query_creator" in key:
+                if key == "sql_db_query_creator":
                     return input_string
         return None
