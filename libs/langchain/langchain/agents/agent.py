@@ -1687,13 +1687,15 @@ s
                     tool_input = intermediate_steps[-1][0].dict().get("tool_input",None)
                     sql_query = json.loads(intermediate_steps[-1][1][0]).get("sql_query",None)
                     answer = json.loads(intermediate_steps[-1][1][0]).get("answer",None)
+                    sources = json.loads(intermediate_steps[-1][1][0]).get("sources",None)
 
                     self.state.append(
                         {
                             "tool": tool_name,
                             "tool_input": tool_input,
                             "sql_query": sql_query,
-                            "answer": answer
+                            "answer": answer,
+                            "sources": sources
 
                         }
                     )
@@ -1701,6 +1703,10 @@ s
                     self.state = []
             else:
                 self.state = []
+
+            if len(self.state) != 0:
+                # return self.state['answer']
+                return AgentFinish({"output": self.state[0]["answer"]}, intermediate_steps[0][0].log)
 
             # Call the LLM to see what to do.
             output = self.agent.plan(
