@@ -42,7 +42,7 @@ class QuerySparkSQLDataBaseTool(StateTool):
     description: str = """
     Input to this tool is a detailed and correct SQL query, output is a result from the database.
     If the query is not correct, an error message will be returned.
-    If an error is returned, rewrite the query, check the query, and try again.
+    If an error is returned, re-run the sql_db_query_creator tool to get the correct query.
     """
 
     def __init__(__pydantic_self__, **data: Any) -> None:
@@ -64,7 +64,8 @@ class QuerySparkSQLDataBaseTool(StateTool):
         )
         executable_query = executable_query.strip('\"')
         executable_query = re.sub('\\n```', '',executable_query)
-        return self.db.run_no_throw(executable_query)
+        query_response = self.db.run_no_throw(executable_query)
+        return query_response
 
     async def _arun(
         self,
@@ -145,8 +146,8 @@ class SqlQueryCreatorTool(StateTool):
     def _create_sql_query(self,user_input):
         
         few_shot_examples = self._parse_few_shot_examples()
-        db_schema = self._parse_db_schema()
         sql_query = self._extract_sql_query()
+        db_schema = self._parse_db_schema()
         data_model_context = self._parse_data_model_context()
         if sql_query is None:
             prompt_input = PromptTemplate(
@@ -167,8 +168,8 @@ class SqlQueryCreatorTool(StateTool):
                     )
         else:
             prompt_input = PromptTemplate(
-                input_variables=["db_schema", "user_input", "few_shot_examples","sql_query","data_model_context"],
-                template=SQL_QUERY_CREATOR_RETRY,
+                input_variables=["db_schema", "user_input", "few_shot_examples","data_model_context"],
+                template=SQL_QUERY_CREATOR_RETRY
             )
             query_creator_chain = LLMChain(llm=self.sqlcreatorllm, prompt=prompt_input)
 
@@ -178,21 +179,18 @@ class SqlQueryCreatorTool(StateTool):
                                 "db_schema": db_schema,
                                 "user_input": user_input,
                                 "few_shot_examples": few_shot_examples,
-                                "sql_query": sql_query,
                                 "data_model_context": data_model_context
-                                
                             }
                         )
                     )
         sql_query = sql_query.replace("```","")
-        if hasattr(self, "state"):
-            self.state.append({"sql_db_query_creator": sql_query})
+        
         
         return sql_query
     
     def _extract_sql_query(self):
         for value in self.state:
             for key, input_string in value.items():
-                if key == "sql_db_query_creator":
+                if "sql_db_query_creator" in key:
                     return input_string
         return None
