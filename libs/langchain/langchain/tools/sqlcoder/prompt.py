@@ -35,7 +35,7 @@ You have failed in the first attempt to generate correct sql query. Please try a
 Your task is convert a question into a SQL query, given a schema which is databricks sql compatible.
 Adhere to these rules:
 - **Deliberately go through the question and database schema word by word** to appropriately answer the question
-- **Deliberately go through the '{sql_query}' and database schema word by word** to ensure that you get the correct column names and metric names to answer the question
+- **Deliberately go through the database schema word by word** to ensure that you get the correct column names and metric names to answer the question
 - **Use Table Aliases** to prevent ambiguity. For example, `SELECT table1.col1, table2.col1 FROM table1 JOIN table2 ON table1.id = table2.id`.
 - When creating a ratio, always cast the numerator as float
 You are an AI research assistant in the senior living industry.
