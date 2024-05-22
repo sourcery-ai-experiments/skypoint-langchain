@@ -75,7 +75,7 @@ class QuerySparkSQLDataBaseTool(StateTool):
         raise NotImplementedError("QuerySparkSQLDataBaseTool does not support async")
 
     def _extract_sql_query(self):
-        for value in self.state:
+        for value in reversed(self.state):
             for key, input_string in value.items():
                 if "sql_db_query_creator" in key:
                     return input_string
