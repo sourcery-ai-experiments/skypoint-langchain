@@ -9,7 +9,7 @@ from langchain.callbacks.manager import (
 from langchain.chains.llm import LLMChain
 from langchain.prompts import PromptTemplate
 from langchain.sql_database import SQLDatabase
-from langchain.tools.sqlcoder.prompt import SQL_QUERY_CREATOR_RETRY, SQL_QUERY_CREATOR
+from langchain.tools.sqlcoder.prompt import SQL_QUERY_CREATOR_RETRY
 from langchain_core.pydantic_v1 import BaseModel, Extra, Field
 from langchain_core.tools import StateTool
 import re
@@ -75,7 +75,7 @@ class QuerySparkSQLDataBaseTool(StateTool):
         raise NotImplementedError("QuerySparkSQLDataBaseTool does not support async")
 
     def _extract_sql_query(self):
-        for value in reversed(self.state):
+        for value in self.state:
             for key, input_string in value.items():
                 if "sql_db_query_creator" in key:
                     return input_string
@@ -93,6 +93,7 @@ class SqlQueryCreatorTool(StateTool):
     Output is a sql query
     """
     sqlcreatorllm: BaseLanguageModel = Field(exclude=True) 
+    SQL_QUERY_CREATOR_TEMPLATE: str 
 
     class Config(StateTool.Config):
         """Configuration for this pydantic object."""
@@ -152,7 +153,7 @@ class SqlQueryCreatorTool(StateTool):
         if sql_query is None:
             prompt_input = PromptTemplate(
                 input_variables=["db_schema", "user_input", "few_shot_examples","data_model_context"],
-                template=SQL_QUERY_CREATOR,
+                template=self.SQL_QUERY_CREATOR_TEMPLATE,
             )
             query_creator_chain = LLMChain(llm=self.sqlcreatorllm, prompt=prompt_input)
 
