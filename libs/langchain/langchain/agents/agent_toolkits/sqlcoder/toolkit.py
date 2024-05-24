@@ -25,6 +25,7 @@ class SQLCoderToolkit(BaseToolkit):
     db_warehouse_id: str
     allow_extra_fields = True
     sqlcreatorllm : BaseLanguageModel = Field(exclude=True)
+    sql_query_creator_template : str
 
     @property
     def dialect(self) -> str:
@@ -58,6 +59,8 @@ class SQLCoderToolkit(BaseToolkit):
                 db_host=self.db_host,
                 db_catalog=self.db_catalog,
                 db_schema=self.db_schema,
-                db_warehouse_id=self.db_warehouse_id 
+                db_warehouse_id=self.db_warehouse_id,
+                SQL_QUERY_CREATOR_TEMPLATE=self.sql_query_creator_template
+
             )
         ]
