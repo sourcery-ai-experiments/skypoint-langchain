@@ -133,6 +133,9 @@ class BaseQAWithSourcesChain(Chain, ABC):
                         r"SOURCES?:|QUESTION:\s", raw_answer, flags=re.IGNORECASE
                     )[:2]
                 sources = re.split(r"\n", raw_sources)[0].strip()
+                if "/" in sources:
+                    sources = sources.split("/")[-1].strip()
+
                 if sources == "":
                     regex = r"- \s*(.+\.pdf)"
                     sources_list = re.findall(regex, raw_sources)
