@@ -185,7 +185,7 @@ class SqlQueryCreatorTool(StateTool):
                         )
                     )
         sql_query = sql_query.replace("```","")
-        
+        sql_query = sql_query.replace("sql","")
         
         return sql_query
     
