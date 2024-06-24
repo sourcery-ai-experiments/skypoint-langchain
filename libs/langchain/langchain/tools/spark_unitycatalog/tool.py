@@ -4,6 +4,7 @@ import json
 import os
 import re
 from typing import Any, Dict, List, Optional
+import logging
 
 import requests
 from langchain.base_language import BaseLanguageModel
@@ -315,9 +316,7 @@ class SqlQueryValidatorTool(StateTool):
         )
         chain = LLMChain(llm=self.llm, prompt=prompt_input)
 
-        query_validation = chain.run(({"db_schema": db_schema, "query": query}))
-
-        return query_validation
+        return chain.run(({"db_schema": db_schema, "query": query}))
 
 
 class QueryUCSQLDataBaseTool(StateTool):
