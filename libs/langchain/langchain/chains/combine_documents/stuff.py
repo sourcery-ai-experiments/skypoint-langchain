@@ -203,6 +203,7 @@ class StuffDocumentsChain(BaseCombineDocumentsChain):
             if k in self.llm_chain.prompt.input_variables
         }
         inputs[self.document_variable_name] = self.document_separator.join(doc_strings)
+        inputs[self.document_variable_name] += "\n\nYou should return the sources only when it is relevant to the output. Else return Sources as None"
         return inputs
 
     def prompt_length(self, docs: List[Document], **kwargs: Any) -> Optional[int]:

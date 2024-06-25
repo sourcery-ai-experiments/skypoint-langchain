@@ -29,6 +29,7 @@ from langchain.chains.qa_with_sources.map_reduce_prompt import (
     QUESTION_PROMPT,
 )
 
+from langchain.tools.retriever import Re
 
 class BaseQAWithSourcesChain(Chain, ABC):
     """Question answering chain with sources over documents."""
@@ -119,15 +120,29 @@ class BaseQAWithSourcesChain(Chain, ABC):
             values["combine_documents_chain"] = values.pop("combine_document_chain")
         return values
 
-    def _split_sources(self, answer: str) -> Tuple[str, str]:
-        """Split sources from answer."""
-        if re.search(r"SOURCES?:", answer, re.IGNORECASE):
-            answer, sources = re.split(
-                r"SOURCES?:|QUESTION:\s", answer, flags=re.IGNORECASE
-            )[:2]
-            sources = re.split(r"\n", sources)[0].strip()
-        else:
-            sources = ""
+    def _split_sources(self, raw_answer: str) -> Tuple[str, str]:
+        """Split sources from answer with exception handling."""
+        try:
+            # Attempt to split sources from the answer
+            if re.search(r"SOURCES?:", raw_answer, re.IGNORECASE):
+                answer, raw_sources = re.split(
+                        r"SOURCES?:|QUESTION:\s", raw_answer, flags=re.IGNORECASE
+                    )[:2]
+                sources = re.split(r"\n", raw_sources)[0].strip()
+                if "/" in sources:
+                    sources = sources.split("/")[-1].strip()
+
+                if sources == "":
+                    regex = r"- \s*(.+\.pdf)"
+                    sources_list = re.findall(regex, raw_sources)
+                    sources = ', '.join(sources_list)
+            else:
+                answer = raw_answer
+                sources = ""
+        except Exception as e:
+            print(f"An error occurred: {e}")
+            answer = raw_answer
+            sources = "Error processing sources"
         return answer, sources
 
     @abstractmethod

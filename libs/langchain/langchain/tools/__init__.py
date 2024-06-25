@@ -193,4 +193,10 @@ __all__ = [
     "ZapierNLARunAction",
     "format_tool_to_openai_function",
     "tool",
+    "ListUnityCatalogTablesTool",
+    "InfoUnityCatalogTool",
+    "SqlQueryValidatorTool",
+    "QueryUCSQLDataBaseTool",
+    "QuerySparkSQLDataBaseTool",
+    "SqlQueryCreatorTool",
 ]

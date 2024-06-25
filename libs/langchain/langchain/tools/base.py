@@ -6,6 +6,7 @@ from langchain_core.tools import (
     ToolException,
     create_schema_from_function,
     tool,
+    StateTool,
 )
 
 __all__ = [
@@ -16,4 +17,5 @@ __all__ = [
     "Tool",
     "StructuredTool",
     "tool",
+    "StateTool"
 ]

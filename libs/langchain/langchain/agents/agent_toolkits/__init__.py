@@ -67,6 +67,8 @@ if TYPE_CHECKING:
     from langchain_community.agent_toolkits.sql.toolkit import SQLDatabaseToolkit
     from langchain_community.agent_toolkits.steam.toolkit import SteamToolkit
     from langchain_community.agent_toolkits.zapier.toolkit import ZapierToolkit
+    from langchain_community.agent_toolkits.unitycatalog.toolkit import UCSQLDatabaseToolkit
+    from langchain_community.agent_toolkits.sqlcoder.toolkit import SQLCoderToolkit
 
 DEPRECATED_AGENTS = [
     "create_csv_agent",
@@ -109,6 +111,8 @@ DEPRECATED_LOOKUP = {
     "create_pbi_chat_agent": "langchain_community.agent_toolkits.powerbi.chat_base",
     "create_spark_sql_agent": "langchain_community.agent_toolkits.spark_sql.base",
     "create_sql_agent": "langchain_community.agent_toolkits.sql.base",
+    "UCSQLDatabaseToolkit": "langchain_community.agent_toolkits.unitycatalog.toolkit",
+    "SQLCoderToolkit": "langchain_community.agent_toolkits.sqlcoder.toolkit",
 }
 
 _import_attribute = create_importer(__package__, deprecated_lookups=DEPRECATED_LOOKUP)
@@ -162,4 +166,6 @@ __all__ = [
     "create_vectorstore_router_agent",
     "create_conversational_retrieval_agent",
     "create_retriever_tool",
+    "UCSQLDatabaseToolkit",
+    "SQLCoderToolkit",
 ]

@@ -282,6 +282,17 @@ if TYPE_CHECKING:
         QuerySQLCheckerTool,
         QuerySQLDataBaseTool,
     )
+    from langchain_community.tools.spark_unitycatalog.tool import (
+        ListUnityCatalogTablesTool,
+        InfoUnityCatalogTool,
+        SqlQueryValidatorTool,
+        QueryUCSQLDataBaseTool,
+
+    )
+    from langchain_community.tools.sql_coder.tool import(
+        QuerySparkSQLDataBaseTool,
+        SqlQueryCreatorTool,
+    )
     from langchain_community.tools.stackexchange.tool import (
         StackExchangeTool,
     )

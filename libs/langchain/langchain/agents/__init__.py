@@ -42,6 +42,8 @@ from langchain.agents.agent import (
     BaseMultiActionAgent,
     BaseSingleActionAgent,
     LLMSingleActionAgent,
+    StateAgentExecutor,
+    CustomPlanandSolveExecutor,
 )
 from langchain.agents.agent_iterator import AgentExecutorIterator
 from langchain.agents.agent_toolkits.vectorstore.base import (
@@ -176,4 +178,6 @@ __all__ = [
     "create_json_chat_agent",
     "create_structured_chat_agent",
     "create_tool_calling_agent",
+    "StateAgentExecutor",
+    "CustomPlanandSolveExecutor",
 ]

@@ -96,6 +96,12 @@ if TYPE_CHECKING:
     from langchain_community.agent_toolkits.zapier.toolkit import (
         ZapierToolkit,
     )
+    from langchain_community.agent_toolkits.unitycatalog.toolkit import (
+        UCSQLDatabaseToolkit,
+    )
+    from langchain_community.agent_toolkits.sqlcoder.toolkit import (
+        SQLCoderToolkit,
+    )
 
 __all__ = [
     "AINetworkToolkit",
@@ -118,6 +124,8 @@ __all__ = [
     "PowerBIToolkit",
     "SQLDatabaseToolkit",
     "SlackToolkit",
+    "UCSQLDatabaseToolkit",  # noqa: F821
+    "SQLCoderToolkit",
     "SparkSQLToolkit",
     "SteamToolkit",
     "ZapierToolkit",
@@ -160,6 +168,8 @@ _module_lookup = {
     "create_pbi_chat_agent": "langchain_community.agent_toolkits.powerbi.chat_base",
     "create_spark_sql_agent": "langchain_community.agent_toolkits.spark_sql.base",
     "create_sql_agent": "langchain_community.agent_toolkits.sql.base",
+    "UCSQLDatabaseToolkit": "langchain_community.agent_toolkits.unitycatalog.toolkit",
+    "SQLCoderToolkit": "langchain_community.agent_toolkits.sqlcoder.toolkit",
 }
 
 
