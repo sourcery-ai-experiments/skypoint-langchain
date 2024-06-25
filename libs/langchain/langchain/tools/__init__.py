@@ -199,4 +199,7 @@ __all__ = [
     "QueryUCSQLDataBaseTool",
     "QuerySparkSQLDataBaseTool",
     "SqlQueryCreatorTool",
+    "BaseRetrieverTool",
+    "RetrieverQATool",
+    "RetrieverQAWithSourcesTool"
 ]

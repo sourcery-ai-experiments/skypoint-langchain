@@ -29,7 +29,6 @@ from langchain.chains.qa_with_sources.map_reduce_prompt import (
     QUESTION_PROMPT,
 )
 
-from langchain.tools.retriever import Re
 
 class BaseQAWithSourcesChain(Chain, ABC):
     """Question answering chain with sources over documents."""
