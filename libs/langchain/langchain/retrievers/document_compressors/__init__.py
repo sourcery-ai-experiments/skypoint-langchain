@@ -15,7 +15,9 @@ from langchain.retrievers.document_compressors.cross_encoder_rerank import (
 from langchain.retrievers.document_compressors.embeddings_filter import (
     EmbeddingsFilter,
 )
-
+from langchain.retrievers.document_compressors.encoded_chain_extract import (
+    LLMEncodedChainExtractor,
+)
 _module_lookup = {
     "FlashrankRerank": "langchain_community.document_compressors.flashrank_rerank",
 }

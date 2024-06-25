@@ -141,6 +141,8 @@ optional = true
 
 [tool.poetry.group.codespell.dependencies]
 codespell = "^2.2.0"
+spacy = {version = "^3.7.2", optional = true}
+en-core-web-sm = {url = "https://github.com/explosion/spacy-models/releases/download/en_core_web_sm-3.7.0/en_core_web_sm-3.7.0-py3-none-any.whl", optional = true}
 
 [tool.poetry.group.test_integration]
 optional = true
@@ -298,6 +300,8 @@ extended_testing = [
  "cohere",
  "langchain-openai",
  "rdflib",
+ "spacy",
+ "en-core-web-sm",
 ]
 
 [tool.ruff]
