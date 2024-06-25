@@ -26,6 +26,7 @@ if TYPE_CHECKING:
         StructuredTool,
         Tool,
         tool,
+        StateTool,
     )
 
     from langchain_community.tools.ainetwork.app import (
@@ -608,6 +609,7 @@ _module_lookup = {
     "authenticate": "langchain_community.tools.office365.utils",
     "format_tool_to_openai_function": "langchain_community.tools.convert_to_openai",
     "tool": "langchain_core.tools",
+    "StateTool" :"langchain_core.tools"
 }
 
 

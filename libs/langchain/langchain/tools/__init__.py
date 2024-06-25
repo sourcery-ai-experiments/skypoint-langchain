@@ -20,7 +20,7 @@ import warnings
 from typing import Any
 
 from langchain_core._api import LangChainDeprecationWarning
-from langchain_core.tools import BaseTool, StructuredTool, Tool, tool
+from langchain_core.tools import BaseTool, StructuredTool, Tool, tool , StateTool
 
 from langchain._api.interactive_env import is_interactive_env
 
@@ -201,5 +201,6 @@ __all__ = [
     "SqlQueryCreatorTool",
     "BaseRetrieverTool",
     "RetrieverQATool",
-    "RetrieverQAWithSourcesTool"
+    "RetrieverQAWithSourcesTool",
+    "StateTool"
 ]
