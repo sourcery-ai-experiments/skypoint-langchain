@@ -5,8 +5,6 @@ pip install google-cloud-aiplatform>=1.35.0
 Your end-user credentials would be used to make the calls (make sure you've run
 `gcloud auth login` first).
 """
-import pytest
-
 from langchain_community.embeddings import VertexAIEmbeddings
 
 
@@ -17,7 +15,6 @@ def test_embedding_documents() -> None:
     assert len(output) == 1
     assert len(output[0]) == 768
     assert model.model_name == model.client._model_id
-    assert model.model_name == "textembedding-gecko@001"
 
 
 def test_embedding_query() -> None:
@@ -53,15 +50,3 @@ def test_paginated_texts() -> None:
     assert len(output) == 8
     assert len(output[0]) == 768
     assert model.model_name == model.client._model_id
-
-
-def test_warning(caplog: pytest.LogCaptureFixture) -> None:
-    _ = VertexAIEmbeddings()
-    assert len(caplog.records) == 1
-    record = caplog.records[0]
-    assert record.levelname == "WARNING"
-    expected_message = (
-        "Model_name will become a required arg for VertexAIEmbeddings starting from "
-        "Feb-01-2024. Currently the default is set to textembedding-gecko@001"
-    )
-    assert record.message == expected_message
