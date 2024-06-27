@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import uuid
+import warnings
 from itertools import repeat
 from typing import (
     TYPE_CHECKING,
@@ -150,7 +151,9 @@ class SupabaseVectorStore(VectorStore):
         embeddings = embedding.embed_documents(texts)
         ids = [str(uuid.uuid4()) for _ in texts]
         docs = cls._texts_to_documents(texts, metadatas)
-        cls._add_vectors(client, table_name, embeddings, docs, ids, chunk_size)
+        cls._add_vectors(
+            client, table_name, embeddings, docs, ids, chunk_size, **kwargs
+        )
 
         return cls(
             client=client,
@@ -204,7 +207,7 @@ class SupabaseVectorStore(VectorStore):
     ) -> List[Tuple[Document, float]]:
         vector = self._embedding.embed_query(query)
         return self.similarity_search_by_vector_with_relevance_scores(
-            vector, k=k, filter=filter
+            vector, k=k, filter=filter, **kwargs
         )
 
     def match_args(
@@ -221,6 +224,7 @@ class SupabaseVectorStore(VectorStore):
         k: int,
         filter: Optional[Dict[str, Any]] = None,
         postgrest_filter: Optional[str] = None,
+        score_threshold: Optional[float] = None,
     ) -> List[Tuple[Document, float]]:
         match_documents_params = self.match_args(query, filter)
         query_builder = self._client.rpc(self.query_name, match_documents_params)
@@ -245,6 +249,18 @@ class SupabaseVectorStore(VectorStore):
             for search in res.data
             if search.get("content")
         ]
+
+        if score_threshold is not None:
+            match_result = [
+                (doc, similarity)
+                for doc, similarity in match_result
+                if similarity >= score_threshold
+            ]
+            if len(match_result) == 0:
+                warnings.warn(
+                    "No relevant docs were retrieved using the relevance score"
+                    f" threshold {score_threshold}"
+                )
 
         return match_result
 
@@ -310,6 +326,7 @@ class SupabaseVectorStore(VectorStore):
         documents: List[Document],
         ids: List[str],
         chunk_size: int,
+        **kwargs: Any,
     ) -> List[str]:
         """Add vectors to Supabase table."""
 
@@ -319,10 +336,10 @@ class SupabaseVectorStore(VectorStore):
                 "content": documents[idx].page_content,
                 "embedding": embedding,
                 "metadata": documents[idx].metadata,  # type: ignore
+                **kwargs,
             }
             for idx, embedding in enumerate(vectors)
         ]
-
         id_list: List[str] = []
         for i in range(0, len(rows), chunk_size):
             chunk = rows[i : i + chunk_size]

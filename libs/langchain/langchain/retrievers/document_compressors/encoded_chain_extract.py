@@ -17,7 +17,7 @@ from langchain.retrievers.document_compressors.encoded_chain_extract_prompt impo
 from langchain.schema import BaseOutputParser, Document, OutputParserException
 from langchain.schema.language_model import BaseLanguageModel
 from langchain.schema.runnable import RunnableConfig, RunnableSerializable
-from langchain.text_splitter import _make_spacy_pipeline_for_splitting
+from langchain_text_splitters.spacy import _make_spacy_pipeline_for_splitting
 
 NO_OUTPUT_STR: str = "NO_OUTPUT"
 

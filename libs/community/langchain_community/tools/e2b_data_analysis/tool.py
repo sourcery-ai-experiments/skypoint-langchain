@@ -5,7 +5,7 @@ import json
 import os
 from io import StringIO
 from sys import version_info
-from typing import IO, TYPE_CHECKING, Any, Callable, List, Optional, Type
+from typing import IO, TYPE_CHECKING, Any, Callable, List, Optional, Type, Union
 
 from langchain_core.callbacks import (
     AsyncCallbackManagerForToolRun,
@@ -96,7 +96,7 @@ class E2BDataAnalysisToolArguments(BaseModel):
 class E2BDataAnalysisTool(BaseTool):
     """Tool for running python code in a sandboxed environment for data analysis."""
 
-    name = "e2b_data_analysis"
+    name: str = "e2b_data_analysis"
     args_schema: Type[BaseModel] = E2BDataAnalysisToolArguments
     session: Any
     description: str
@@ -197,11 +197,11 @@ class E2BDataAnalysisTool(BaseTool):
             "exit_code": output.exit_code,
         }
 
-    def install_python_packages(self, package_names: str | List[str]) -> None:
+    def install_python_packages(self, package_names: Union[str, List[str]]) -> None:
         """Install python packages in the sandbox."""
         self.session.install_python_packages(package_names)
 
-    def install_system_packages(self, package_names: str | List[str]) -> None:
+    def install_system_packages(self, package_names: Union[str, List[str]]) -> None:
         """Install system packages (via apt) in the sandbox."""
         self.session.install_system_packages(package_names)
 

@@ -1,21 +1,17 @@
-"""Util that calls Bing Search.
-
-In order to set this up, follow instructions at:
-https://levelup.gitconnected.com/api-tutorial-how-to-use-bing-web-search-api-in-python-4165d5592a7e
-"""
+"""Util that calls Bing Search."""
 from typing import Dict, List
 
 import requests
 from langchain_core.pydantic_v1 import BaseModel, Extra, Field, root_validator
 from langchain_core.utils import get_from_dict_or_env
 
+# BING_SEARCH_ENDPOINT is the default endpoint for Bing Search API and is normally
+# invariant to users.
+BING_SEARCH_ENDPOINT = "https://api.bing.microsoft.com/v7.0/search"
+
 
 class BingSearchAPIWrapper(BaseModel):
-    """Wrapper for Bing Search API.
-
-    In order to set this up, follow instructions at:
-    https://levelup.gitconnected.com/api-tutorial-how-to-use-bing-web-search-api-in-python-4165d5592a7e
-    """
+    """Wrapper for Bing Search API."""
 
     bing_subscription_key: str
     bing_search_url: str
@@ -44,7 +40,9 @@ class BingSearchAPIWrapper(BaseModel):
         )
         response.raise_for_status()
         search_results = response.json()
-        return search_results["webPages"]["value"]
+        if "webPages" in search_results:
+            return search_results["webPages"]["value"]
+        return []
 
     @root_validator(pre=True)
     def validate_environment(cls, values: Dict) -> Dict:
@@ -58,7 +56,7 @@ class BingSearchAPIWrapper(BaseModel):
             values,
             "bing_search_url",
             "BING_SEARCH_URL",
-            # default="https://api.bing.microsoft.com/v7.0/search",
+            default=BING_SEARCH_ENDPOINT,
         )
 
         values["bing_search_url"] = bing_search_url

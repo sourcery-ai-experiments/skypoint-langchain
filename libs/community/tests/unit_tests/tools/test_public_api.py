@@ -1,4 +1,5 @@
 """Test the public API of the tools package."""
+
 from langchain_community.tools import __all__ as public_api
 
 _EXPECTED = [
@@ -10,6 +11,12 @@ _EXPECTED = [
     "AIPluginTool",
     "APIOperation",
     "ArxivQueryRun",
+    "AskNewsSearch",
+    "AzureAiServicesDocumentIntelligenceTool",
+    "AzureAiServicesImageAnalysisTool",
+    "AzureAiServicesSpeechToTextTool",
+    "AzureAiServicesTextToSpeechTool",
+    "AzureAiServicesTextAnalyticsForHealthTool",
     "AzureCogsFormRecognizerTool",
     "AzureCogsImageAnalysisTool",
     "AzureCogsSpeech2TextTool",
@@ -25,8 +32,14 @@ _EXPECTED = [
     "BingSearchRun",
     "BraveSearch",
     "ClickTool",
+    "CogniswitchKnowledgeSourceFile",
+    "CogniswitchKnowledgeStatus",
+    "CogniswitchKnowledgeSourceURL",
+    "CogniswitchKnowledgeRequest",
+    "ConneryAction",
     "CopyFileTool",
     "CurrentWebPageTool",
+    "DataheraldTextToSQL",
     "DeleteFileTool",
     "DuckDuckGoSearchResults",
     "DuckDuckGoSearchRun",
@@ -81,7 +94,12 @@ _EXPECTED = [
     "OpenAPISpec",
     "OpenWeatherMapQueryRun",
     "PubmedQueryRun",
+    "PolygonAggregates",
+    "PolygonFinancials",
+    "PolygonLastQuote",
+    "PolygonTickerNews",
     "RedditSearchRun",
+    "RedditSearchSchema",
     "QueryCheckerTool",
     "QueryPowerBITool",
     "QuerySQLCheckerTool",
@@ -116,12 +134,17 @@ _EXPECTED = [
     "WolframAlphaQueryRun",
     "WriteFileTool",
     "YahooFinanceNewsTool",
+    "YouSearchTool",
     "YouTubeSearchTool",
     "ZapierNLAListActions",
     "ZapierNLARunAction",
+    "Detector",
+    "ZenGuardInput",
+    "ZenGuardTool",
     "authenticate",
     "format_tool_to_openai_function",
     "tool",
+    "MojeekSearch",
 ]
 
 

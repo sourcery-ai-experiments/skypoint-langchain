@@ -1,9 +1,10 @@
 """GitHub Toolkit."""
+
 from typing import Dict, List
 
 from langchain_core.pydantic_v1 import BaseModel, Field
+from langchain_core.tools import BaseToolkit
 
-from langchain_community.agent_toolkits.base import BaseToolkit
 from langchain_community.tools import BaseTool
 from langchain_community.tools.github.prompt import (
     COMMENT_ON_ISSUE_PROMPT,
@@ -32,30 +33,44 @@ from langchain_community.utilities.github import GitHubAPIWrapper
 
 
 class NoInput(BaseModel):
+    """Schema for operations that do not require any input."""
+
     no_input: str = Field("", description="No input required, e.g. `` (empty string).")
 
 
 class GetIssue(BaseModel):
+    """Schema for operations that require an issue number as input."""
+
     issue_number: int = Field(0, description="Issue number as an integer, e.g. `42`")
 
 
 class CommentOnIssue(BaseModel):
+    """Schema for operations that require a comment as input."""
+
     input: str = Field(..., description="Follow the required formatting.")
 
 
 class GetPR(BaseModel):
+    """Schema for operations that require a PR number as input."""
+
     pr_number: int = Field(0, description="The PR number as an integer, e.g. `12`")
 
 
 class CreatePR(BaseModel):
+    """Schema for operations that require a PR title and body as input."""
+
     formatted_pr: str = Field(..., description="Follow the required formatting.")
 
 
 class CreateFile(BaseModel):
+    """Schema for operations that require a file path and content as input."""
+
     formatted_file: str = Field(..., description="Follow the required formatting.")
 
 
 class ReadFile(BaseModel):
+    """Schema for operations that require a file path as input."""
+
     formatted_filepath: str = Field(
         ...,
         description=(
@@ -66,12 +81,16 @@ class ReadFile(BaseModel):
 
 
 class UpdateFile(BaseModel):
+    """Schema for operations that require a file path and content as input."""
+
     formatted_file_update: str = Field(
         ..., description="Strictly follow the provided rules."
     )
 
 
 class DeleteFile(BaseModel):
+    """Schema for operations that require a file path as input."""
+
     formatted_filepath: str = Field(
         ...,
         description=(
@@ -84,6 +103,8 @@ class DeleteFile(BaseModel):
 
 
 class DirectoryPath(BaseModel):
+    """Schema for operations that require a directory path as input."""
+
     input: str = Field(
         "",
         description=(
@@ -94,12 +115,16 @@ class DirectoryPath(BaseModel):
 
 
 class BranchName(BaseModel):
+    """Schema for operations that require a branch name as input."""
+
     branch_name: str = Field(
         ..., description="The name of the branch, e.g. `my_branch`."
     )
 
 
 class SearchCode(BaseModel):
+    """Schema for operations that require a search query as input."""
+
     search_query: str = Field(
         ...,
         description=(
@@ -110,6 +135,8 @@ class SearchCode(BaseModel):
 
 
 class CreateReviewRequest(BaseModel):
+    """Schema for operations that require a username as input."""
+
     username: str = Field(
         ...,
         description="GitHub username of the user being requested, e.g. `my_username`.",
@@ -117,6 +144,8 @@ class CreateReviewRequest(BaseModel):
 
 
 class SearchIssuesAndPRs(BaseModel):
+    """Schema for operations that require a search query as input."""
+
     search_query: str = Field(
         ...,
         description="Natural language search query, e.g. `My issue title or topic`.",
@@ -134,6 +163,9 @@ class GitHubToolkit(BaseToolkit):
         and comments on GitHub.
 
         See [Security](https://python.langchain.com/docs/security) for more information.
+
+    Parameters:
+        tools: List[BaseTool]. The tools in the toolkit. Default is an empty list.
     """
 
     tools: List[BaseTool] = []
@@ -142,6 +174,14 @@ class GitHubToolkit(BaseToolkit):
     def from_github_api_wrapper(
         cls, github_api_wrapper: GitHubAPIWrapper
     ) -> "GitHubToolkit":
+        """Create a GitHubToolkit from a GitHubAPIWrapper.
+
+        Args:
+            github_api_wrapper: GitHubAPIWrapper. The GitHub API wrapper.
+
+        Returns:
+            GitHubToolkit. The GitHub toolkit.
+        """
         operations: List[Dict] = [
             {
                 "mode": "get_issues",
@@ -280,7 +320,7 @@ class GitHubToolkit(BaseToolkit):
             )
             for action in operations
         ]
-        return cls(tools=tools)
+        return cls(tools=tools)  # type: ignore[arg-type]
 
     def get_tools(self) -> List[BaseTool]:
         """Get the tools in the toolkit."""
