@@ -47,6 +47,9 @@ if TYPE_CHECKING:
     from langchain_community.tools.arxiv.tool import (
         ArxivQueryRun,
     )
+    from langchain_community.tools.asknews.tool import (
+        AskNewsSearch,
+    )
     from langchain_community.tools.azure_ai_services import (
         AzureAiServicesDocumentIntelligenceTool,
         AzureAiServicesImageAnalysisTool,
@@ -88,6 +91,7 @@ if TYPE_CHECKING:
     from langchain_community.tools.convert_to_openai import (
         format_tool_to_openai_function,
     )
+    from langchain_community.tools.dataherald import DataheraldTextToSQL
     from langchain_community.tools.ddg_search.tool import (
         DuckDuckGoSearchResults,
         DuckDuckGoSearchRun,
@@ -326,6 +330,11 @@ if TYPE_CHECKING:
         ZapierNLAListActions,
         ZapierNLARunAction,
     )
+    from langchain_community.tools.zenguard.tool import (
+        Detector,
+        ZenGuardInput,
+        ZenGuardTool,
+    )
 
 __all__ = [
     "AINAppOps",
@@ -336,6 +345,7 @@ __all__ = [
     "AIPluginTool",
     "APIOperation",
     "ArxivQueryRun",
+    "AskNewsSearch",
     "AzureAiServicesDocumentIntelligenceTool",
     "AzureAiServicesImageAnalysisTool",
     "AzureAiServicesSpeechToTextTool",
@@ -364,6 +374,7 @@ __all__ = [
     "CopyFileTool",
     "CurrentWebPageTool",
     "DeleteFileTool",
+    "DataheraldTextToSQL",
     "DuckDuckGoSearchResults",
     "DuckDuckGoSearchRun",
     "E2BDataAnalysisTool",
@@ -462,6 +473,9 @@ __all__ = [
     "YouTubeSearchTool",
     "ZapierNLAListActions",
     "ZapierNLARunAction",
+    "Detector",
+    "ZenGuardInput",
+    "ZenGuardTool",
     "authenticate",
     "format_tool_to_openai_function",
     "tool",
@@ -479,6 +493,7 @@ _module_lookup = {
     "AIPluginTool": "langchain_community.tools.plugin",
     "APIOperation": "langchain_community.tools.openapi.utils.api_models",
     "ArxivQueryRun": "langchain_community.tools.arxiv.tool",
+    "AskNewsSearch": "langchain_community.tools.asknews.tool",
     "AzureAiServicesDocumentIntelligenceTool": "langchain_community.tools.azure_ai_services",  # noqa: E501
     "AzureAiServicesImageAnalysisTool": "langchain_community.tools.azure_ai_services",
     "AzureAiServicesSpeechToTextTool": "langchain_community.tools.azure_ai_services",
@@ -508,6 +523,7 @@ _module_lookup = {
     "CurrentWebPageTool": "langchain_community.tools.playwright",
     "DataheraldTextToSQL": "langchain_community.tools.dataherald.tool",
     "DeleteFileTool": "langchain_community.tools.file_management",
+    "Detector": "langchain_community.tools.zenguard.tool",
     "DuckDuckGoSearchResults": "langchain_community.tools.ddg_search.tool",
     "DuckDuckGoSearchRun": "langchain_community.tools.ddg_search.tool",
     "E2BDataAnalysisTool": "langchain_community.tools.e2b_data_analysis.tool",
@@ -606,6 +622,8 @@ _module_lookup = {
     "YouTubeSearchTool": "langchain_community.tools.youtube.search",
     "ZapierNLAListActions": "langchain_community.tools.zapier.tool",
     "ZapierNLARunAction": "langchain_community.tools.zapier.tool",
+    "ZenGuardInput": "langchain_community.tools.zenguard.tool",
+    "ZenGuardTool": "langchain_community.tools.zenguard.tool",
     "authenticate": "langchain_community.tools.office365.utils",
     "format_tool_to_openai_function": "langchain_community.tools.convert_to_openai",
     "tool": "langchain_core.tools",
@@ -618,6 +636,3 @@ def __getattr__(name: str) -> Any:
         module = importlib.import_module(_module_lookup[name])
         return getattr(module, name)
     raise AttributeError(f"module {__name__} has no attribute {name}")
-
-
-__all__ = list(_module_lookup.keys())
